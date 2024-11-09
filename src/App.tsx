@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import {Counter} from "./components/Counter";
+import {Params} from "./components/Params";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [startValue, setStartValue] = useState<number>(localStorage.getItem('startValue') ? Number(localStorage.getItem('startValue')) : 0)
+    const [maxValue, setMaxValue] = useState<number>(localStorage.getItem('maxValue') ? Number(localStorage.getItem('maxValue')) :5)
+    const [isChangedMode, setIsChangedMode] = useState<boolean>(false)
+
+    useEffect(() => {
+        localStorage.setItem('startValue', JSON.stringify(startValue))
+        localStorage.setItem('maxValue', JSON.stringify(maxValue))
+    }, [isChangedMode])
+
+    return (
+        <div className="App">
+            {isChangedMode ? <Params startValue={startValue} maxValue={maxValue} setStartValue={setStartValue}
+                                     setMaxValue={setMaxValue} setIsChangedMode={setIsChangedMode}/> :
+                <Counter startValue={startValue} maxValue={maxValue} setIsChangedMode={setIsChangedMode}/>}
+        </div>
+    );
 }
 
 export default App;
